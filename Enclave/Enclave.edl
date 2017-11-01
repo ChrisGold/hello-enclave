@@ -4,6 +4,11 @@ enclave {
     trusted {
         /* define ECALLs here. */
         public int generate_random_number(void);
+        
+        public void put_string(int key, [in, string] char *value);
+        public void put_int(int key, int value);
+        public void get_string(int key, [out, size=max_size] char *copyTo, size_t max_size);
+        public int get_int(int key);
     };
 
     untrusted {

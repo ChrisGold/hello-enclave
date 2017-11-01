@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <malloc.h>
 #include "Enclave_u.h"
 #include "sgx_urts.h"
 #include "sgx_utils/sgx_utils.h"
@@ -19,12 +20,19 @@ int main(int argc, char const *argv[]) {
     }
     int ptr;
     sgx_status_t status = generate_random_number(global_eid, &ptr);
+    
+    size_t buf_size = 128;
+    char* buffer = (char*) malloc(buf_size);
+    sgx_status_t status2 = get_string(global_eid, 0, buffer, buf_size);
+    
     std::cout << status << std::endl;
     if (status != SGX_SUCCESS) {
         std::cout << "noob" << std::endl;
     }
     printf("Random number: %d\n", ptr);
 
+    printf("A message!: %s", buffer);
+    
     // Seal the random number
     size_t sealed_size = sizeof(sgx_sealed_data_t) + sizeof(ptr);
     uint8_t* sealed_data = (uint8_t*)malloc(sealed_size);
